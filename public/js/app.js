@@ -5,26 +5,30 @@ do {
 } while(!username)
 
 const textarea = document.querySelector('#textarea')
+const user_ids = document.querySelector('#user_id')
 const submitBtn = document.querySelector('#submitBtn')
 const commentBox = document.querySelector('.comment__box')
 
 submitBtn.addEventListener('click', (e) => {
     e.preventDefault()
     let comment = textarea.value
+    let user_id = user_ids.value
     if(!comment) {
         return
     }
-    postComment(comment)
+    postComment(comment,user_id)
 })
 
-function postComment(comment) {
+function postComment(comment,user_id) {
     // Append to dom
     let data = {
+        user_id: user_id,
         username: username,
         comment: comment
     }
     appendToDom(data)
     textarea.value = ''
+    user_ids.value = ''
     // Broadcast
     broadcastComment(data)
     // Sync with Mongo Db
@@ -33,6 +37,7 @@ function postComment(comment) {
 }
 
 function appendToDom(data) {
+    console.log(data);
     let lTag = document.createElement('li')
     lTag.classList.add('comment', 'mb-3')
 
@@ -40,6 +45,8 @@ function appendToDom(data) {
                         <div class="card border-light mb-3">
                             <div class="card-body">
                                 <h6>${data.username}</h6>
+                                <h6>${data.user_id}</h6>
+
                                 <p>${data.comment}</p>
                                 <div>
                                     <img src="/img/clock.png" alt="clock">
@@ -92,7 +99,7 @@ function syncWithDb(data) {
     fetch('/api/comments', { method: 'Post', body:  JSON.stringify(data), headers})
         .then(response => response.json())
         .then(result => {
-            console.log(result)
+            // console.log(result)
         })
 }
 

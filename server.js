@@ -37,14 +37,13 @@ const server = app.listen(port, () => {
 let io = require('socket.io')(server)
 
 io.on('connection', (socket) => {
-    console.log(`New connection: ${socket.id}`)
+   
     // Recieve event
     socket.on('comment', (data) => {
+        console.log(`Socket id: ${socket.id} and user_id is ${data.user_id}`)
+        // console.log(data);
         data.time = Date()
         socket.broadcast.emit('comment', data)
-    })
-
-    socket.on('typing', (data) => {
-        socket.broadcast.emit('typing', data) 
+        // io.to(socket.id).emit('comment',data);
     })
 })
