@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3500
 
 app.use(express.static('public'))
 
@@ -43,7 +43,9 @@ io.on('connection', (socket) => {
         console.log(`Socket id: ${socket.id} and user_id is ${data.user_id}`)
         // console.log(data);
         data.time = Date()
-        socket.broadcast.emit('comment', data)
-        // io.to(socket.id).emit('comment',data);
+        //  socket.broadcast.emit('comment', data)
+        io.to('B82HtkhWabBdDsCAAAAA').emit("comment", data);
+
+     
     })
 })
